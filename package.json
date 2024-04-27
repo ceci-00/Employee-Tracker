@@ -1,0 +1,24 @@
+{
+  "name": "employee-tracker",
+  "version": "1.0.0",
+  "description": "SQL Challenge: Employee Tracker\r Developers frequently have to create interfaces that allow non-developers to easily view and interact with information stored in databases. These interfaces are called content management systems (CMS). Your assignment this week is to build a command-line application from scratch to manage a company's employee database, using Node.js, Inquirer, and MySQL.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ceci-00/Employee-Tracker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ceci-00/Employee-Tracker/issues"
+  },
+  "homepage": "https://github.com/ceci-00/Employee-Tracker#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "inquirer": "^8.2.6",
+    "mysql2": "^3.9.2"
+  }
+}
