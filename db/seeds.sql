@@ -6,7 +6,7 @@ INSERT INTO department (name) VALUES
     ('Human Resources');
 
 -- ROLE SEEDS
-INSERT INTO roles (job_title, salary, department_id) VALUES
+INSERT INTO roles (title, salary, department_id) VALUES
     ('Sales Representative', 50000, 1),
     ('Sales Manager', 82000, 1),
     ('Account Executive', 67000, 1),
