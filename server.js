@@ -249,7 +249,11 @@ const addRole = async () => {
     try {
         console.log('Adding role...\n');
         const [departments] = await db.query('SELECT * FROM department');
-        const departmentChoices = departments.map(department => ({ name: department.name, value: department.id }));
+        const departmentChoices = departments.map(department => ({
+            name: department.name,
+            value: department.id
+        }));
+
         const { title, salary, department_id } = await inquirer.prompt([
             {
                 type: 'input',
@@ -263,13 +267,28 @@ const addRole = async () => {
             },
             {
                 type: 'list',
-                name: 'department_id',
-                message: 'Select the role department:',
+                name: 'department_id', // Change here
+                message: 'Select the department for the role:',
                 choices: departmentChoices
             }
         ]);
-        await db.query('INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)', [title, salary, department_id]);
+
+        await db.query('INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)', [
+            title,
+            salary,
+            department_id // Change here
+        ]);
         console.log('Role added successfully!');
+
+        // View the updated roles table after adding the new role
+        console.log('\nUpdated roles table:');
+        const [roles] = await db.query(`
+      SELECT r.id AS 'Role ID', r.title AS 'Role Title', d.name AS 'Department', r.salary AS 'Salary'
+      FROM roles r
+      LEFT JOIN department d ON r.department_id = d.id;
+    `);
+        console.table(roles);
+
         mainMenu();
     } catch (err) {
         console.error('Error in add role:', err);
