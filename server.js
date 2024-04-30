@@ -3,6 +3,8 @@ const inquirer = require('inquirer');
 const mysql = require('mysql2/promise');
 const fs = require('fs');
 const { connect } = require('http2');
+
+require('dotenv').config();
 // declaring database connection
 let db;
 // function to connect to the database
@@ -12,27 +14,13 @@ const connectToDatabase = async () => {
         db = await mysql.createConnection({
             host: 'localhost',
             user: 'root',
-            password: 'pw12',
+            password: process.env.DB_PW,
             database: 'departments_db'
         });
         console.log('Connected to the departments_db database.');
-        // seeding the database
-        await seedDatabase();
         mainMenu();
     } catch (err) {
         console.error('Error connecting to the database:', err);
-    }
-};
-// function to seed the database
-const seedDatabase = async () => {
-    try {
-        // reading the seeds.sql file
-        const seed = fs.readFileSync('./assets/db/seeds.sql').toString();
-        // executing the seeds file
-        await db.query(seed);
-        console.log('Database seeded!');
-    } catch (err) {
-        console.error('Error seeding the database:', err);
     }
 };
 // main menu function
@@ -202,6 +190,7 @@ const viewEmployeesByDepartment = async () => {
         );
         // Display the employees by department
         console.table(rows);
+        mainMenu();
     } catch (err) {
         console.error('Error viewing employees by department:', err);
     }
@@ -465,7 +454,7 @@ const updateEmployeeManager = async () => {
         LEFT JOIN department d ON r.department_id = d.id
         LEFT JOIN employee m ON e.manager_id = m.id;
     `);
-    // Display the updated employee table
+        // Display the updated employee table
         console.table(updatedEmployees);
         mainMenu();
     } catch (err) {
