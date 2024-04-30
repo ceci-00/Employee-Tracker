@@ -19,7 +19,7 @@ Clone the repository from GitHub. Install the required dependencies:
 To start application, run `npm start` in the command line.
 
 ## Usage
-Attached video demonstrating functionality of app. [Usage Demo](<./assets/video.mp4>)
+Attached video demonstrating functionality of app. [Usage Demo](./assets/employee-tracker.webm)
 
 ## License
 [License: MIT](https://opensource.org/licenses/MIT)
