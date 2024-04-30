@@ -43,7 +43,7 @@ const mainMenu = async () => {
             type: 'list',
             name: 'choice',
             message: 'What would you like to do?',
-            choices: ['View All Departments', 'View All Roles', 'View All Employees', 'View Employees by Manager', 'View Employees by Department', 'Add Employee', 'Add Department', 'Add Role', 'Update Employee Role', 'Update Employee Manager', 'Delete Department', 'Delete Role', 'Delete Employee', 'Quit']
+            choices: ['View All Departments', 'View All Roles', 'View All Employees', 'View Employees by Manager', 'View Employees by Department', 'Add Employee', 'Add Department', 'Add Role', 'Update Employee Role', 'Update Employee Manager', 'Delete Department', 'Delete Role', 'Delete Employee', 'View Department Budget', 'Quit']
         });
         // switch case to execute the selected option
         switch (choice) {
@@ -85,6 +85,9 @@ const mainMenu = async () => {
                 break;
             case 'Delete Employee':
                 deleteEmployee();
+                break;
+            case 'View Department Budget':
+                viewDepartmentBudget();
                 break;
             case 'Quit':
                 process.exit();
@@ -605,6 +608,47 @@ const deleteEmployee = async () => {
         mainMenu();
     } catch (err) {
         console.error('Error in delete employee:', err);
+    }
+}
+// View department budget function
+const viewDepartmentBudget = async () => {
+    try {
+        console.log('Viewing department budget...\n');
+        // Fetch all departments from the database
+        const [departments] = await db.query('SELECT * FROM department');
+        // Prompt the user to select the department
+        const departmentChoices = departments.map(department => ({
+            name: department.name,
+            value: department.id
+        }));
+        const { departmentId } = await inquirer.prompt([
+            {
+                type: 'list',
+                name: 'departmentId',
+                message: 'Select the department to view the budget:',
+                choices: departmentChoices
+            }
+        ]);
+        // Query to calculate the total utilized budget for the selected department
+        const [result] = await db.query(`
+      SELECT
+        d.name AS 'Department',
+        SUM(r.salary) AS 'Total Utilized Budget'
+      FROM
+        department d
+        JOIN roles r ON d.id = r.department_id
+        JOIN employee e ON e.role_id = r.id
+      WHERE
+        d.id = ?
+      GROUP BY
+        d.name
+    `, [departmentId]);
+        // Display the department and total utilized budget
+        console.log(`Total Utilized Budget for ${result[0]['Department']} Department:`);
+        console.table(result);
+        mainMenu();
+    } catch (err) {
+        console.error('Error in view department budget:', err);
     }
 };
 
